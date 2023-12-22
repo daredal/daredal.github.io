@@ -21,13 +21,7 @@
     padding: 20px;
     margin-bottom: 30px;
   }
-  .player {
-    margin: 20px;
-    padding: 20px;
-    background: #ccffcc; /* Verde pastello */
-    border-radius: 10px;
-  }
-  .score-section {
+  .section {
     background: #ffffff; /* Sfondo bianco */
     padding: 20px;
     margin-top: 30px;
@@ -46,45 +40,55 @@
   <div class="header">
     <h1>Qualcunə deve pagare.</h1>
   </div>
-  <div id="authSection">
-    <!-- Questa sezione verrà popolata dal JavaScript sotto -->
+  <div id="authSection" class="section">
+    <!-- Sezione di autenticazione -->
   </div>
-  <div class="score-section" id="scores">
+  <div id="playersSection" class="section">
+    <!-- Sezione per gestire i giocatori -->
+  </div>
+  <div id="scoresSection" class="section">
     <h2>Riepilogo Punteggi:</h2>
+    <!-- Sezione dei punteggi -->
   </div>
 </div>
 <script>
-  // Verifica se ci sono utenti salvati nel localStorage
-  let users = JSON.parse(localStorage.getItem('users')) || {};
+// Assumendo l'uso di localStorage per semplicità e dimostrazione
+let users = JSON.parse(localStorage.getItem('users')) || {};
 
-  // Seleziona la sezione in cui inserire la form di autenticazione
-  const authSection = document.getElementById('authSection');
+document.addEventListener('DOMContentLoaded', function() {
+  checkLoggedIn();
+  createAuthForm();
+});
 
-  // Funzione per creare la form di autenticazione
-  function createAuthForm() {
-    const formHtml = `
+function createAuthForm() {
+  const formHtml = `
+    <div>
       <input type="text" id="name" placeholder="Nome" />
       <input type="password" id="pin" placeholder="PIN (4 cifre)" />
       <button onclick="registerUser()">Registra</button>
-    `;
-    authSection.innerHTML = formHtml;
-  }
+      <button onclick="loginUser()">Accedi</button>
+    </div>
+  `;
+  document.getElementById('authSection').innerHTML = formHtml;
+}
 
-  // Funzione per registrare l'utente
-  function registerUser() {
-    const name = document.getElementById('name').value;
-    const pin = document.getElementById('pin').value;
-    if (name && pin.length === 4) {
-      users[name] = pin;
-      localStorage.setItem('users', JSON.stringify(users)); // Salva l'utente
-      alert("Utente registrato con successo!");
-    } else {
-      alert("Inserisci un nome e un PIN di 4 cifre.");
-    }
-  }
+function registerUser() {
+  // Logica di registrazione...
+}
 
-  // Inizializza la form di autenticazione
-  createAuthForm();
+function loginUser() {
+  // Logica di accesso...
+}
+
+function displayScoreSection() {
+  // Mostra la sezione dei punteggi e nasconde la sezione di autenticazione...
+}
+
+function checkLoggedIn() {
+  // Controlla se l'utente è già loggato...
+}
+
+// Aggiungi qui le funzioni per modificare/eliminare profili e punteggi
 </script>
 </body>
 </html>
