@@ -43,9 +43,17 @@
   <div id="authSection" class="section">
     <!-- Sezione di autenticazione -->
   </div>
+  <div id="gameSection" class="section" style="display:none;">
+    <h2>Tracciamento Gioco Corrente:</h2>
+    <!-- Qui verranno visualizzati e aggiornati i punteggi del gioco corrente -->
+  </div>
+  <div id="userManagementSection" class="section" style="display:none;">
+    <h2>Gestione Utenti:</h2>
+    <!-- Qui gli utenti possono modificare/eliminare il proprio profilo -->
+  </div>
   <div id="scoresSection" class="section" style="display:none;">
     <h2>Riepilogo Punteggi:</h2>
-    <!-- Qui verranno visualizzati i punteggi -->
+    <!-- Sezione per i punteggi -->
   </div>
 </div>
 <script>
@@ -107,6 +115,8 @@ function checkLoggedIn() {
     createAuthForm(); // Altrimenti mostra la form di autenticazione
   }
 }
+
+// Aggiungi qui le funzioni per tracciare i giochi, modificare/eliminare profili e punteggi
 </script>
 </body>
 </html>
