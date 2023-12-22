@@ -3,14 +3,13 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Tracciamento Punteggi Natalizi</title>
+<title>Qualcunə deve pagare.</title>
 <style>
   body {
+    font-family: Arial, sans-serif;
+    text-align: center;
     background: linear-gradient(to right, #ff9999, #99ff99); /* Gradiente Rosso-Verde pastello */
     color: #333;
-    font-family: 'Roboto', sans-serif; /* Font moderno e leggibile */
-    text-align: center;
-    padding: 20px;
   }
   .container {
     max-width: 600px;
@@ -28,59 +27,64 @@
     background: #ccffcc; /* Verde pastello */
     border-radius: 10px;
   }
-  .player input, .player button {
-    margin: 5px;
-    padding: 10px;
-    border: none;
-    border-radius: 5px;
-  }
-  .button {
-    background: #ccffcc; /* Verde pastello */
-    border: 2px solid #ffd700; /* Bordo dorato */
-    color: #333;
-  }
   .score-section {
     background: #ffffff; /* Sfondo bianco */
     padding: 20px;
     margin-top: 30px;
     border-radius: 10px;
   }
+  input, button {
+    padding: 10px;
+    margin: 5px;
+    border-radius: 5px;
+    border: none;
+  }
 </style>
 </head>
 <body>
 <div class="container">
   <div class="header">
-    <h1>Tracciamento Punteggi Natalizi</h1>
+    <h1>Qualcunə deve pagare.</h1>
   </div>
-  <div id="players"></div>
-  <button onclick="addPlayer()" class="button">Aggiungi Giocatore</button>
+  <div id="authSection">
+    <!-- Questa sezione verrà popolata dal JavaScript sotto -->
+  </div>
   <div class="score-section" id="scores">
     <h2>Riepilogo Punteggi:</h2>
-    <!-- I dettagli dei punteggi verranno aggiunti qui -->
   </div>
 </div>
 <script>
-let playerCount = 0;
+  // Verifica se ci sono utenti salvati nel localStorage
+  let users = JSON.parse(localStorage.getItem('users')) || {};
 
-function addPlayer() {
-  playerCount++;
-  let playerDiv = document.createElement('div');
-  playerDiv.className = 'player';
-  playerDiv.innerHTML = `
-    <h3>Giocatore ${playerCount}</h3>
-    <input type="text" id="name${playerCount}" placeholder="Nome">
-    <input type="number" id="score${playerCount}" placeholder="Gettoni" value="0">
-    <button onclick="updateScore(${playerCount})" class="button">Aggiorna</button>
-  `;
-  document.getElementById('players').appendChild(playerDiv);
-}
+  // Seleziona la sezione in cui inserire la form di autenticazione
+  const authSection = document.getElementById('authSection');
 
-function updateScore(playerId) {
-  let name = document.getElementById('name' + playerId).value || 'Giocatore ' + playerId;
-  let score = document.getElementById('score' + playerId).value;
-  let scoresDiv = document.getElementById('scores');
-  scoresDiv.innerHTML += `<p>${name}: ${score} gettoni</p>`;
-}
+  // Funzione per creare la form di autenticazione
+  function createAuthForm() {
+    const formHtml = `
+      <input type="text" id="name" placeholder="Nome" />
+      <input type="password" id="pin" placeholder="PIN (4 cifre)" />
+      <button onclick="registerUser()">Registra</button>
+    `;
+    authSection.innerHTML = formHtml;
+  }
+
+  // Funzione per registrare l'utente
+  function registerUser() {
+    const name = document.getElementById('name').value;
+    const pin = document.getElementById('pin').value;
+    if (name && pin.length === 4) {
+      users[name] = pin;
+      localStorage.setItem('users', JSON.stringify(users)); // Salva l'utente
+      alert("Utente registrato con successo!");
+    } else {
+      alert("Inserisci un nome e un PIN di 4 cifre.");
+    }
+  }
+
+  // Inizializza la form di autenticazione
+  createAuthForm();
 </script>
 </body>
 </html>
