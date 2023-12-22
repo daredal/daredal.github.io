@@ -43,16 +43,12 @@
   <div id="authSection" class="section">
     <!-- Sezione di autenticazione -->
   </div>
-  <div id="playersSection" class="section">
-    <!-- Sezione per gestire i giocatori -->
-  </div>
-  <div id="scoresSection" class="section">
+  <div id="scoresSection" class="section" style="display:none;">
     <h2>Riepilogo Punteggi:</h2>
-    <!-- Sezione dei punteggi -->
+    <!-- Qui verranno visualizzati i punteggi -->
   </div>
 </div>
 <script>
-// Assumendo l'uso di localStorage per semplicità e dimostrazione
 let users = JSON.parse(localStorage.getItem('users')) || {};
 
 document.addEventListener('DOMContentLoaded', function() {
@@ -73,22 +69,44 @@ function createAuthForm() {
 }
 
 function registerUser() {
-  // Logica di registrazione...
+  const name = document.getElementById('name').value;
+  const pin = document.getElementById('pin').value;
+  if (name && pin.length === 4) {
+    users[name] = pin;
+    localStorage.setItem('users', JSON.stringify(users)); // Salva l'utente
+    alert("Utente registrato con successo!");
+    loginUser(); // Effettua automaticamente il login dopo la registrazione
+  } else {
+    alert("Inserisci un nome e un PIN di 4 cifre.");
+  }
 }
 
 function loginUser() {
-  // Logica di accesso...
+  const name = document.getElementById('name').value;
+  const pin = document.getElementById('pin').value;
+  if (users[name] && users[name] === pin) {
+    localStorage.setItem('currentUser', name); // Memorizza l'utente corrente
+    displayScoreSection(); // Mostra la sezione dei punteggi
+    alert("Accesso effettuato con successo!");
+  } else {
+    alert("Nome utente o PIN errati.");
+  }
 }
 
 function displayScoreSection() {
-  // Mostra la sezione dei punteggi e nasconde la sezione di autenticazione...
+  document.getElementById('authSection').style.display = 'none';
+  document.getElementById('scoresSection').style.display = 'block';
+  // Aggiorna la sezione dei punteggi con informazioni pertinenti, se necessario
 }
 
 function checkLoggedIn() {
-  // Controlla se l'utente è già loggato...
+  const currentUser = localStorage.getItem('currentUser');
+  if (currentUser) {
+    displayScoreSection(); // Mostra direttamente i punteggi se l'utente è già loggato
+  } else {
+    createAuthForm(); // Altrimenti mostra la form di autenticazione
+  }
 }
-
-// Aggiungi qui le funzioni per modificare/eliminare profili e punteggi
 </script>
 </body>
 </html>
