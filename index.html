@@ -37,28 +37,17 @@
 </head>
 <body>
 <div class="container">
-  <div class="header">
-    <h1>Qualcunə deve pagare.</h1>
-  </div>
-  <div id="authSection" class="section">
-    <!-- Sezione di autenticazione -->
-  </div>
   <div id="gameSection" class="section" style="display:none;">
-    <h2>Tracciamento Gioco Corrente:</h2>
-    <!-- Qui verranno visualizzati e aggiornati i punteggi del gioco corrente -->
+  <h2>Tracciamento Gioco Corrente:</h2>
+  <div>
+    <input type="number" id="newScore" placeholder="Nuovo punteggio" />
+    <button onclick="addScore()">Aggiungi</button>
   </div>
-  <div id="userManagementSection" class="section" style="display:none;">
-    <h2>Gestione Utenti:</h2>
-    <!-- Qui gli utenti possono modificare/eliminare il proprio profilo -->
-  </div>
-  <div id="scoresSection" class="section" style="display:none;">
-    <h2>Riepilogo Punteggi:</h2>
-    <!-- Sezione per i punteggi -->
+  <div id="currentScores">
+    <!-- Qui verranno visualizzati i punteggi correnti -->
   </div>
 </div>
 <script>
-let users = JSON.parse(localStorage.getItem('users')) || {};
-
 document.addEventListener('DOMContentLoaded', function() {
   checkLoggedIn();
   createAuthForm();
@@ -103,8 +92,9 @@ function loginUser() {
 
 function displayScoreSection() {
   document.getElementById('authSection').style.display = 'none';
+  document.getElementById('gameSection').style.display = 'block';
   document.getElementById('scoresSection').style.display = 'block';
-  // Aggiorna la sezione dei punteggi con informazioni pertinenti, se necessario
+  // Qui potresti voler aggiornare o visualizzare i punteggi dell'utente
 }
 
 function checkLoggedIn() {
@@ -116,7 +106,64 @@ function checkLoggedIn() {
   }
 }
 
-// Aggiungi qui le funzioni per tracciare i giochi, modificare/eliminare profili e punteggi
+// Funzione per aggiungere punteggi per un gioco corrente
+function addGameScore() {
+  // Assumi che ogni giocatore inizi con 3 gettoni
+  const scoreValue = document.getElementById('newScore').value; // Ottieni il valore dal campo di input
+  const currentUser = localStorage.getItem('currentUser');
+  let gameScores = JSON.parse(localStorage.getItem('gameScores')) || {}; // Ottieni i punteggi esistenti
+
+  if (!gameScores[currentUser]) {
+    gameScores[currentUser] = [3]; // Inizia ogni giocatore con 3 gettoni
+  }
+
+  // Modifica il punteggio basato sull'input dell'utente
+  // Qui potresti voler implementare logica specifica basata sul tuo gioco
+  gameScores[currentUser].push(parseInt(scoreValue)); // Aggiungi il nuovo punteggio
+
+  localStorage.setItem('gameScores', JSON.stringify(gameScores)); // Salva i punteggi aggiornati
+  updateScoresDisplay(); // Aggiorna la visualizzazione dei punteggi
+}
+
+// Funzione per visualizzare i punteggi del gioco corrente
+function updateScoresDisplay() {
+  const currentUser = localStorage.getItem('currentUser');
+  let gameScores = JSON.parse(localStorage.getItem('gameScores')) || {};
+  let scoresList = gameScores[currentUser] || [];
+
+  let displayText = 'Punteggi: ' + (scoresList.join(', ')); // Crea una stringa dei punteggi
+  document.getElementById('currentScores').innerText = displayText;
+}
+
+// Funzione per modificare il profilo utente
+function editUserProfile() {
+  const currentUser = localStorage.getItem('currentUser');
+  let newName = prompt("Inserisci il nuovo nome per " + currentUser);
+  let newPin = prompt("Inserisci il nuovo PIN (4 cifre)");
+
+  if (newName && newPin && newPin.length === 4) {
+    // Aggiorna il nome e il PIN dell'utente
+    users[currentUser] = newPin;
+    localStorage.setItem('users', JSON.stringify(users));
+    alert("Profilo aggiornato con successo!");
+  } else {
+    alert("Errore: Assicurati di inserire un nome valido e un PIN di 4 cifre.");
+  }
+}
+
+// Funzione per eliminare un profilo utente
+function deleteUserProfile() {
+  const currentUser = localStorage.getItem('currentUser');
+  if (confirm("Sei sicuro di voler eliminare il profilo di " + currentUser + "?")) {
+    delete users[currentUser]; // Rimuove l'utente dall'oggetto users
+    localStorage.setItem('users', JSON.stringify(users)); // Aggiorna gli utenti nel localStorage
+    localStorage.removeItem('currentUser'); // Rimuovi il currentUser dal localStorage
+    localStorage.removeItem('gameScores'); // Opzionalmente, rimuovi anche i punteggi associati
+    alert("Profilo eliminato con successo.");
+    // Qui potresti voler reindirizzare l'utente o aggiornare la pagina
+  }
+}
+
 </script>
 </body>
 </html>
